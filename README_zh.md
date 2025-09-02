@@ -6,7 +6,7 @@
 
 > 一个用于创建动态、AI 生成的视觉小说和 Galgame 的框架，其故事、选项和角色反应均由大型语言模型驱动。
 
-![ai-galgame-01.png](https://imgtu.com/upload/xzslo1tx/ai-galgame-01)
+![ai-galgame-01.png](https://imgtu.com/uploads/xzslo1tx/ai-galgame-01.png)
 
 本项目使用 React、TypeScript 和 Dify.ai 后端，旨在创造一种沉浸式的、由叙事驱动的体验。它具有经典的视觉小说界面和一个健壮的与 LLM 的通信协议，以确保结构化和可靠的故事生成。
 

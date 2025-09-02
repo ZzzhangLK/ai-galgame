@@ -6,7 +6,7 @@
 
 > A framework for creating dynamic, AI-generated visual novels and Galgames, where the story, choices, and character reactions are all powered by a Large Language Model.
 
-![ai-galgame-01.png](https://imgtu.com/upload/xzslo1tx/ai-galgame-01)
+![ai-galgame-01.png](https://imgtu.com/uploads/xzslo1tx/ai-galgame-01.png)
 
 This project uses React, TypeScript, and a Dify.ai backend to create an immersive, narrative-driven experience. It features a classic visual novel interface and a robust communication protocol with the LLM to ensure structured and reliable story generation.
 
