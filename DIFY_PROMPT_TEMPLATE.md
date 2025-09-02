@@ -78,33 +78,7 @@ SPEAKER: DIALOGUE_TEXT
 }
 </command>
 
-## Full Output Example (What you must generate):
-艾拉: 看来你还挺靠谱的嘛。给，这个你拿着，就当是谢礼吧。
----JSON_PAYLOAD---
-{
-  "background": "classroom_afternoon.png",
-  "bgm": "sentimental_theme.mp3",
-  "sound_effect": "item_get.wav",
-  "characters": [
-    {
-      "name": "艾拉",
-      "sprite": "ella_blushing.png",
-      "position": "center"
-    }
-  ],
-  "choices": [
-    { "text": "这是……什么？", "action": "ask_about_item" },
-    { "text": "谢谢你，我会珍惜的。", "action": "thank_her_sincerely" }
-  ],
-  "state_update": {
-    "affection": {
-      "艾拉": "+2"
-    },
-    "flags": {
-      "received_pendant": true
-    }
-  }
-}
+
 
 # Story Context (Provided by user)
 {{#creative_prompt#}}
