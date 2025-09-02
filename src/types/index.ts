@@ -59,12 +59,14 @@ export interface GameState {
   flags: Record<string, boolean>;
   isLoading: boolean;
   error: string | null;
-  tips: GameTip[]; // Replaces affectionChanges
+  tips: GameTip[];
+  lastPayload: string | null;
 }
 
 export interface GameActions {
   startGame: (context: string) => void;
   makeChoice: (choiceText: string, choiceAction: string) => void;
   resetGame: () => void;
-  removeTip: (id: number) => void; // Replaces removeAffectionChange
+  removeTip: (id: number) => void;
+  retryLastRequest: () => void;
 }

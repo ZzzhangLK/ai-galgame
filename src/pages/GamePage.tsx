@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '../store/gameStore';
 import styled from 'styled-components';
-import { Alert } from 'antd';
+import { Alert, Button } from 'antd';
 
 import GameScreen from '../components/GameScreen';
 import DialogueBox from '../components/DialogueBox';
@@ -42,7 +42,7 @@ const GamePage = () => {
     error,
     makeChoice,
     tips,
-    removeTip,
+    retryLastRequest,
   } = useGameStore();
 
   useEffect(() => {
@@ -70,12 +70,17 @@ const GamePage = () => {
     <GameScreen backgroundImage={backgroundImage ? `/assets/images/backgrounds/${backgroundImage}` : undefined}>
       <TipOverlay>
         {tips.map((tip, index) => (
-          <GameTip key={tip.id} tip={tip} index={index} onComplete={removeTip} />
+          <GameTip key={tip.id} tip={tip} index={index} />
         ))}
       </TipOverlay>
 
       {locationName && <LocationDisplay name={locationName} />}
-      {error && <Alert message={error} type="error" closable style={{ position: 'absolute', top: 20, left: 20, zIndex: 30 }} />}
+      {error && (
+        <div style={{ position: 'absolute', top: 20, left: 20, zIndex: 30 }}>
+          <Alert message={error} type="error" closable />
+          <Button type="primary" onClick={retryLastRequest} disabled={isLoading}>Retry</Button>
+        </div>
+      )}
 
       <DialogueBox speaker={speaker} text={dialogueText} isLoading={isLoading} />
 

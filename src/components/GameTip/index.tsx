@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import type { GameTip as GameTipType } from '../../types';
 
@@ -7,18 +7,18 @@ const flyInAndFadeOut = keyframes`
     opacity: 0;
     transform: translateX(100%);
   }
-  10% {
-    opacity: 1;
-    transform: translateX(0);
-  }
-  90% {
+  5% {
     opacity: 1;
     transform: translateX(0);
   }
   100% {
-    opacity: 0;
-    transform: translateX(10px);
+    opacity: 1;
+    transform: translateX(0);
   }
+  // 100% {
+  //   opacity: 0;
+  //   transform: translateX(10px);
+  // }
 `;
 
 const TipContainer = styled.div<{ index: number }>`
@@ -32,7 +32,7 @@ const TipContainer = styled.div<{ index: number }>`
   font-size: 1rem;
   font-weight: bold;
   z-index: 100;
-  animation: ${flyInAndFadeOut} 10s ease-in-out forwards;
+  animation: ${flyInAndFadeOut} 15s ease-in-out forwards;
   border: 1px solid var(--color-dialogue-border);
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 `;
@@ -40,18 +40,9 @@ const TipContainer = styled.div<{ index: number }>`
 interface GameTipProps {
   tip: GameTipType;
   index: number; /* Add index prop */
-  onComplete: (id: number) => void;
 }
 
-const GameTip: React.FC<GameTipProps> = ({ tip, index, onComplete }) => {
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      onComplete(tip.id);
-    }, 8000); // Increased duration to 5 seconds
-
-    return () => clearTimeout(timer);
-  }, [tip.id, onComplete]);
-
+const GameTip: React.FC<GameTipProps> = ({ tip, index }) => {
   return <TipContainer index={index}>{tip.text}</TipContainer>;
 };
 
