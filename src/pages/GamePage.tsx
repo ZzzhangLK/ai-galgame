@@ -7,6 +7,8 @@ import { Alert } from 'antd';
 import GameScreen from '../components/GameScreen';
 import DialogueBox from '../components/DialogueBox';
 import ChoiceButton from '../components/ChoiceButton';
+import LocationDisplay from '../components/LocationDisplay';
+import GameTip from '../components/GameTip';
 
 const ChoicesOverlay = styled.div`
   position: absolute;
@@ -19,7 +21,15 @@ const ChoicesOverlay = styled.div`
   z-index: 10;
 `;
 
-// No longer need a full-screen loading overlay
+const TipOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Allow clicks to pass through */
+  z-index: 100;
+`;
 
 const SPEAKER_DIALOGUE_SEPARATOR = ':';
 
@@ -31,6 +41,8 @@ const GamePage = () => {
     isLoading,
     error,
     makeChoice,
+    tips,
+    removeTip,
   } = useGameStore();
 
   useEffect(() => {
@@ -42,26 +54,31 @@ const GamePage = () => {
   const currentScene = history[history.length - 1];
 
   if (!currentScene) {
-    // Initial loading before the first scene is ready
     return <GameScreen />;
   }
 
   const { speaker, dialogue, command, playerChoice } = currentScene;
-  // If a choice has been made for the current scene, we don't show choices
   const choices = playerChoice ? [] : command?.choices || [];
   const backgroundImage = command?.background;
+  const locationName = command?.location_name;
 
-  // Extract only the dialogue text for rendering
   const dialogueText = dialogue.includes(SPEAKER_DIALOGUE_SEPARATOR)
     ? dialogue.substring(dialogue.indexOf(SPEAKER_DIALOGUE_SEPARATOR) + 1).trim()
     : dialogue;
 
   return (
     <GameScreen backgroundImage={backgroundImage ? `/assets/images/backgrounds/${backgroundImage}` : undefined}>
+      <TipOverlay>
+        {tips.map((tip, index) => (
+          <GameTip key={tip.id} tip={tip} index={index} onComplete={removeTip} />
+        ))}
+      </TipOverlay>
+
+      {locationName && <LocationDisplay name={locationName} />}
       {error && <Alert message={error} type="error" closable style={{ position: 'absolute', top: 20, left: 20, zIndex: 30 }} />}
-      
+
       <DialogueBox speaker={speaker} text={dialogueText} isLoading={isLoading} />
-      
+
       {choices.length > 0 && (
         <ChoicesOverlay>
           {choices.map((choice) => (

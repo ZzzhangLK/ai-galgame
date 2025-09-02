@@ -6,14 +6,14 @@ const API_KEY = import.meta.env.VITE_API_KEY;
 export const streamMessageToDify = async (
   query: string,
   conversationId: string | null,
-  storyContext: string, // 参数变更为故事背景
+  storyContext: string,
   onDelta: (chunk: string) => void,
   onComplete: (response: DifyResponse) => void,
   onError: (error: Error) => void
 ) => {
   const payload = {
     inputs: {
-      creative_prompt: storyContext, // 变量名与Dify中设置的 {{#sys.creative_prompt#}} 对应
+      creative_prompt: storyContext,
     },
     query,
     user: 'player-01',
@@ -40,37 +40,40 @@ export const streamMessageToDify = async (
     }
 
     const reader = response.body.getReader();
-    const decoder = new TextDecoder();
+    const decoder = new TextDecoder('utf-8');
+    let buffer = '';
     let accumulatedAnswer = '';
     let finalConversationId = conversationId || '';
 
-    // eslint-disable-next-line no-constant-condition
     while (true) {
       const { done, value } = await reader.read();
       if (done) {
         break;
       }
 
-      const textChunk = decoder.decode(value, { stream: true });
-      const lines = textChunk.split('\n');
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+
+      // The last line might be incomplete, so we keep it in the buffer
+      buffer = lines.pop() || '';
 
       for (const line of lines) {
-        if (line.startsWith('data: ')) {
-          try {
-            const jsonStr = line.substring(6);
-            if (jsonStr.trim() === '') continue;
+        if (line.trim() === '' || !line.startsWith('data:')) {
+          continue;
+        }
 
-            const eventData = JSON.parse(jsonStr);
+        try {
+          const jsonStr = line.substring(6);
+          const eventData = JSON.parse(jsonStr);
 
-            if (eventData.event === 'message') {
-              onDelta(eventData.answer);
-              accumulatedAnswer += eventData.answer;
-            } else if (eventData.event === 'message_end') {
-              finalConversationId = eventData.conversation_id;
-            }
-          } catch (e) {
-            console.warn('Skipping non-JSON line:', line);
+          if (eventData.event === 'message') {
+            onDelta(eventData.answer);
+            accumulatedAnswer += eventData.answer;
+          } else if (eventData.event === 'message_end') {
+            finalConversationId = eventData.conversation_id;
           }
+        } catch (e) {
+          console.warn('Skipping non-JSON line:', line, e);
         }
       }
     }

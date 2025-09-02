@@ -1,12 +1,20 @@
-// types/index.ts
+/**
+ * A temporary, animated tip displayed on screen to give the player feedback.
+ */
+export interface GameTip {
+  id: number;
+  text: string;
+}
 
 /**
- * LLM输出的JSON payload部分，定义了一个场景的所有非对话元素。
+ * The JSON payload from the LLM, defining all non-dialogue elements of a scene.
  */
 export interface SceneCommand {
+  location_name?: string;
   background?: string;
   bgm?: string;
   sound_effect?: string;
+  tips?: string[]; // Array of human-readable strings to show as tips
   characters?: {
     name: string;
     sprite: string;
@@ -14,29 +22,49 @@ export interface SceneCommand {
   }[];
   choices?: {
     text: string;
-    action: string; // An identifier for the choice
+    action: string;
   }[];
   state_update?: {
-    affection?: Record<string, string>; // e.g., { "ella": "+1", "lina": "-1" }
+    affection?: Record<string, string>;
     flags?: Record<string, boolean>;
   };
 }
 
 /**
- * 代表游戏历史记录中的一个完整场景 (一帧画面)
+ * A complete scene (a single frame) in the game's history.
  */
 export interface Scene {
-  id: string; // 用于 React key
+  id: string;
   speaker: string;
-  dialogue: string; // 流式对话文本
-  playerChoice?: string; // 玩家在进入此场景前做出的选择
-  command: SceneCommand | null; // LLM返回的完整指令，在流式结束后填充
+  dialogue: string;
+  playerChoice?: string;
+  command: SceneCommand | null;
 }
 
 /**
- * 代表从 Dify API 返回的原始响应
+ * The raw response from the Dify API.
  */
 export interface DifyResponse {
   answer: string;
   conversation_id: string;
+}
+
+// --- Zustand Store Types ---
+
+export interface GameState {
+  storyContext: string;
+  conversationId: string | null;
+  history: Scene[];
+  affection: Record<string, number>;
+  flags: Record<string, boolean>;
+  isLoading: boolean;
+  error: string | null;
+  tips: GameTip[]; // Replaces affectionChanges
+}
+
+export interface GameActions {
+  startGame: (context: string) => void;
+  makeChoice: (choiceText: string, choiceAction: string) => void;
+  resetGame: () => void;
+  removeTip: (id: number) => void; // Replaces removeAffectionChange
 }

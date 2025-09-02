@@ -13,7 +13,7 @@ const ScreenContainer = styled.div`
 
 interface GameScreenProps {
   backgroundImage?: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 const GameScreen: React.FC<GameScreenProps> = ({ backgroundImage, children }) => {
