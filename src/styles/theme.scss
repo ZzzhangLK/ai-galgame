@@ -1,0 +1,16 @@
+:root {
+  --font-family-sans: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', sans-serif;
+  
+  --color-text: #EAEAEA;
+  --color-speaker: #FFFFFF;
+  
+  --color-dialogue-bg: rgba(15, 20, 40, 0.85);
+  --color-dialogue-border: rgba(200, 220, 255, 0.6);
+  --color-dialogue-glow: 0 0 8px rgba(150, 180, 255, 0.3), inset 0 0 6px rgba(150, 180, 255, 0.2);
+
+  --color-choice-bg: rgba(20, 30, 60, 0.9);
+  --color-choice-border: rgba(200, 220, 255, 0.7);
+  --color-choice-hover-bg: rgba(40, 60, 110, 0.95);
+  --color-choice-text: #FFFFFF;
+}
