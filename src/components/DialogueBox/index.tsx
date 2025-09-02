@@ -8,7 +8,7 @@ const DialogueBoxContainer = styled.div`
   left: 50%;
   transform: translateX(-50%);
   width: 96vw;
-  height: 28vh;
+  height: 30vh;
   background: var(--color-dialogue-bg);
   border: 2px solid var(--color-dialogue-border);
   border-radius: 10px;

@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { streamMessageToDify } from '../api/dify';
 import type { GameState, GameActions, Scene, SceneCommand, DifyResponse, GameTip } from '../types';
 
-const SPEAKER_DIALOGUE_SEPARATOR = ':';
+
 
 const initialState: GameState = {
   storyContext: '',
@@ -45,9 +45,9 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
           dialogueContent = dialogueMatch[1].split('</dialogue>')[0];
         }
 
-        const parts = dialogueContent.split(SPEAKER_DIALOGUE_SEPARATOR);
-        const speaker = parts.length > 1 ? parts[0].trim() : '旁白';
-        const dialogue = parts.length > 1 ? parts.slice(1).join(SPEAKER_DIALOGUE_SEPARATOR).trim() : dialogueContent;
+        const parts = dialogueContent.split(/[:：]/, 2);
+        const speaker = parts.length > 1 && parts[0].trim() ? parts[0].trim() : '旁白';
+        const dialogue = parts.length > 1 ? parts[1].trim() : dialogueContent;
 
         history[history.length - 1] = { ...currentScene, speaker, dialogue };
         return { history };
@@ -66,9 +66,9 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
 
       const dialogueContent = dialogueMatch[1].trim();
       const commandJson = commandMatch[1].trim();
-      const parts = dialogueContent.split(SPEAKER_DIALOGUE_SEPARATOR);
-      const speaker = parts.length > 1 ? parts[0].trim() : '旁白';
-      const dialogue = parts.length > 1 ? parts.slice(1).join(SPEAKER_DIALOGUE_SEPARATOR).trim() : dialogueContent;
+      const parts = dialogueContent.split(/[:：]/, 2);
+      const speaker = parts.length > 1 && parts[0].trim() ? parts[0].trim() : '旁白';
+      const dialogue = parts.length > 1 ? parts[1].trim() : dialogueContent;
 
       try {
         const command: SceneCommand = JSON.parse(commandJson);
@@ -129,9 +129,9 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
         const dialogueMatch = accumulatedRawResponse.match(/<dialogue>([\s\S]*)/);
         if (dialogueMatch) dialogueContent = dialogueMatch[1].split('</dialogue>')[0];
 
-        const parts = dialogueContent.split(SPEAKER_DIALOGUE_SEPARATOR);
-        const speaker = parts.length > 1 ? parts[0].trim() : '旁白';
-        const dialogue = parts.length > 1 ? parts.slice(1).join(SPEAKER_DIALOGUE_SEPARATOR).trim() : dialogueContent;
+        const parts = dialogueContent.split(/[:：]/, 2);
+        const speaker = parts.length > 1 && parts[0].trim() ? parts[0].trim() : '旁白';
+        const dialogue = parts.length > 1 ? parts[1].trim() : dialogueContent;
 
         history[history.length - 1] = { ...currentScene, speaker, dialogue };
         return { history };
@@ -150,9 +150,9 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
 
       const dialogueContent = dialogueMatch[1].trim();
       const commandJson = commandMatch[1].trim();
-      const parts = dialogueContent.split(SPEAKER_DIALOGUE_SEPARATOR);
-      const speaker = parts.length > 1 ? parts[0].trim() : '旁白';
-      const dialogue = parts.length > 1 ? parts.slice(1).join(SPEAKER_DIALOGUE_SEPARATOR).trim() : dialogueContent;
+      const parts = dialogueContent.split(/[:：]/, 2);
+      const speaker = parts.length > 1 && parts[0].trim() ? parts[0].trim() : '旁白';
+      const dialogue = parts.length > 1 ? parts[1].trim() : dialogueContent;
 
       try {
         const command: SceneCommand = JSON.parse(commandJson);
@@ -214,9 +214,9 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
           dialogueContent = dialogueMatch[1].split('</dialogue>')[0];
         }
 
-        const parts = dialogueContent.split(SPEAKER_DIALOGUE_SEPARATOR);
-        const speaker = parts.length > 1 ? parts[0].trim() : '旁白';
-        const dialogue = parts.length > 1 ? parts.slice(1).join(SPEAKER_DIALOGUE_SEPARATOR).trim() : dialogueContent;
+        const parts = dialogueContent.split(/[:：]/, 2);
+        const speaker = parts.length > 1 && parts[0].trim() ? parts[0].trim() : '旁白';
+        const dialogue = parts.length > 1 ? parts[1].trim() : dialogueContent;
 
         history[history.length - 1] = { ...currentScene, speaker, dialogue };
         return { history };
@@ -235,9 +235,9 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
 
       const dialogueContent = dialogueMatch[1].trim();
       const commandJson = commandMatch[1].trim();
-      const parts = dialogueContent.split(SPEAKER_DIALOGUE_SEPARATOR);
-      const speaker = parts.length > 1 ? parts[0].trim() : '旁白';
-      const dialogue = parts.length > 1 ? parts.slice(1).join(SPEAKER_DIALOGUE_SEPARATOR).trim() : dialogueContent;
+      const parts = dialogueContent.split(/[:：]/, 2);
+      const speaker = parts.length > 1 && parts[0].trim() ? parts[0].trim() : '旁白';
+      const dialogue = parts.length > 1 ? parts[1].trim() : dialogueContent;
 
       try {
         const command: SceneCommand = JSON.parse(commandJson);

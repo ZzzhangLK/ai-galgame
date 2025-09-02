@@ -12,7 +12,7 @@ import GameTip from '../components/GameTip';
 
 const ChoicesOverlay = styled.div`
   position: absolute;
-  top: 50%;
+  top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
@@ -31,7 +31,7 @@ const TipOverlay = styled.div`
   z-index: 100;
 `;
 
-const SPEAKER_DIALOGUE_SEPARATOR = ':';
+
 
 const GamePage = () => {
   const navigate = useNavigate();
@@ -62,9 +62,7 @@ const GamePage = () => {
   const backgroundImage = command?.background;
   const locationName = command?.location_name;
 
-  const dialogueText = dialogue.includes(SPEAKER_DIALOGUE_SEPARATOR)
-    ? dialogue.substring(dialogue.indexOf(SPEAKER_DIALOGUE_SEPARATOR) + 1).trim()
-    : dialogue;
+  
 
   return (
     <GameScreen backgroundImage={backgroundImage ? `/assets/images/backgrounds/${backgroundImage}` : undefined}>
@@ -82,7 +80,7 @@ const GamePage = () => {
         </div>
       )}
 
-      <DialogueBox speaker={speaker} text={dialogueText} isLoading={isLoading} />
+      <DialogueBox speaker={speaker} text={dialogue} isLoading={isLoading} />
 
       {choices.length > 0 && (
         <ChoicesOverlay>
