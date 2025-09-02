@@ -110,12 +110,31 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
 
   makeChoice: (choiceText: string, choiceAction: string) => {
     const { conversationId, storyContext, affection, flags } = get();
-    set((state) => ({ isLoading: true, error: null, history: state.history.map((s, i) => i === state.history.length - 1 ? { ...s, playerChoice: choiceText } : s) }));
+
+    // Step 1: Mark the player's choice on the last scene to hide the buttons
+    set((state) => ({
+      isLoading: true,
+      error: null,
+      history: state.history.map((s, i) =>
+        i === state.history.length - 1 ? { ...s, playerChoice: choiceText } : s
+      ),
+    }));
 
     const placeholderId = `scene-${Date.now()}`;
     const prevScene = get().history[get().history.length - 1];
-    const placeholder: Scene = { id: placeholderId, speaker: '', dialogue: '', command: { ...prevScene.command, choices: [] } };
-    set((state) => ({ history: [...state.history, placeholder] }));
+
+    // Step 2: Immediately add a new scene echoing the player's choice.
+    // This scene will be updated in place by the LLM response stream.
+    const playerEchoScene: Scene = {
+      id: placeholderId,
+      speaker: '我',
+      dialogue: choiceText,
+      command: { ...(prevScene.command || {}), choices: [] },
+    };
+
+    set((state) => ({
+      history: [...state.history, playerEchoScene],
+    }));
 
     let accumulatedRawResponse = '';
     const onDelta = (chunk: string) => {
@@ -130,7 +149,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
         if (dialogueMatch) dialogueContent = dialogueMatch[1].split('</dialogue>')[0];
 
         const parts = dialogueContent.split(/[:：]/, 2);
-        const speaker = parts.length > 1 && parts[0].trim() ? parts[0].trim() : '旁白';
+        // On the first delta, this will replace the player echo.
+        const speaker = parts.length > 1 && parts[0].trim() ? parts[0].trim() : '...'; // Show loading dots if speaker not yet available
         const dialogue = parts.length > 1 ? parts[1].trim() : dialogueContent;
 
         history[history.length - 1] = { ...currentScene, speaker, dialogue };
