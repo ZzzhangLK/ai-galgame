@@ -4,7 +4,7 @@ import { Spin } from 'antd';
 
 const DialogueBoxContainer = styled.div`
   position: absolute;
-  bottom: 2vh;
+  bottom: 2vw;
   left: 50%;
   transform: translateX(-50%);
   width: 96vw;
